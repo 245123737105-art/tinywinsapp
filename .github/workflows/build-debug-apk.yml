@@ -25,11 +25,15 @@ jobs:
           api-level: 33
           build-tools: '33.0.2'
 
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew || true
+      - name: Setup Gradle (install if wrapper missing)
+        uses: gradle/gradle-build-action@v2
+        with:
+          # optional: omit if you want latest; you can set a version if needed:
+          # gradle-version: '8.4'
+          cache-dependencies: true
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug --no-daemon
+      - name: Build debug APK (use gradle on PATH)
+        run: gradle assembleDebug --no-daemon
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
