@@ -1,42 +1,8 @@
-name: Build Debug APK
-
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
-
-jobs:
-  build-debug:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Install Android SDK & build-tools
-        uses: android-actions/setup-android@v2
-        with:
-          api-level: 33
-          build-tools: '33.0.2'
-
       - name: Setup Gradle (install if wrapper missing)
         uses: gradle/gradle-build-action@v2
         with:
-          # optional: omit if you want latest; you can set a version if needed:
-          # gradle-version: '8.4'
+          gradle-version: '7.5'
           cache-dependencies: true
 
       - name: Build debug APK (use gradle on PATH)
         run: gradle assembleDebug --no-daemon
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-debug-apk
-          path: app/build/outputs/apk/debug/*.apk
